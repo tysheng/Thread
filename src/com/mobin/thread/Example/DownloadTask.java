@@ -1,7 +1,5 @@
 package com.mobin.thread.Example;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -13,6 +11,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 /**
  * Created by Mobin on 2017/8/5.
@@ -23,7 +22,7 @@ public class DownloadTask implements Runnable {
     private final DownloadBuffer xbuf;
     private final URL requestURL;
     private final AtomicBoolean cancelFlag;
-    private static final Logger log = LoggerFactory.getLogger(DownloadTask.class);
+    private static final Logger log = Logger.getGlobal();
 
     public DownloadTask(long lowerBound, long upperBound, URL requestURL,
                         Storage storage, AtomicBoolean cancelFlag){

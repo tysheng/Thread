@@ -1,23 +1,22 @@
 package com.mobin.thread.Example;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Logger;
 
 /**
  * Created by Mobin on 2017/8/5.
  */
-public class Storage implements Closeable, AutoCloseable{
+public class Storage implements Closeable, AutoCloseable {
     private final RandomAccessFile storeFile;
     private final FileChannel storeChannel;
     protected final AtomicLong totalWrites = new AtomicLong(0);
-    private static final Logger log = LoggerFactory.getLogger(Storage.class);
+    private static final Logger log = Logger.getGlobal();
 
-    public Storage(long fileSize,String fileShortName) throws FileNotFoundException {
+    public Storage(long fileSize, String fileShortName) throws FileNotFoundException {
         String fullFileName = "F:" + "/" + fileShortName;
         String localFileName = createStoreFile(fileSize, fullFileName);
         storeFile = new RandomAccessFile(localFileName, "rw");
@@ -32,19 +31,19 @@ public class Storage implements Closeable, AutoCloseable{
         return length;
     }
 
-    public long getTotalWrites(){
+    public long getTotalWrites() {
         return totalWrites.get();
     }
 
     private String createStoreFile(long fileSize, String fullFileName) throws FileNotFoundException {
         File file = new File(fullFileName);
-        log.info("Create local file: %s", fullFileName);
+        log.info("Create local file: " + fullFileName);
         RandomAccessFile raf = new RandomAccessFile(file, "rw");
         try {
             raf.setLength(fileSize);
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 raf.close();
             } catch (IOException e) {

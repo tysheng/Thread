@@ -1,8 +1,5 @@
 package com.mobin.thread.Example;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 /**
  * Created by Mobin on 2017/8/5.
@@ -22,7 +20,7 @@ public class BigFileDownloader {
     protected final long fileSize;
     protected final Storage storage;//负责已经下载数据的存储
     protected final  AtomicBoolean taskCanceled = new AtomicBoolean(false);
-    private static final Logger log = LoggerFactory.getLogger(BigFileDownloader.class);
+    private static final Logger log = Logger.getGlobal();
 
     public static synchronized void initLog4j(){
         String log4jFile = System.getProperty("log4j");
@@ -49,7 +47,7 @@ public class BigFileDownloader {
     public BigFileDownloader(String strURL) throws Exception {
         requestURL = new URL(strURL);
         fileSize = retiveFileSize(requestURL);
-        log.info("file total size: %s", fileSize);
+        log.info("file total size: "+ fileSize);
         //String fileName = strURL.substring(strURL.lastIndexOf("/") + 1);
         String fileName = "mobin.flv";
         storage = new Storage(fileSize, fileName);
@@ -85,7 +83,7 @@ public class BigFileDownloader {
             if (complection == 100) {
                 break;
             } else if (complection - lastComplection >= 1){
-                log.info("Complection:%s%%", complection);
+                log.info("Complection:"+ complection);
                 if (complection > 90) {
                     reportInterval = 1000;
                 }
@@ -93,7 +91,7 @@ public class BigFileDownloader {
             Thread.sleep(reportInterval);
         }
 
-        log.info("Complection:%s%%",complection);
+        log.info("Complection:"+complection);
     }
 
     private void dispatchWork(final DownloadTask dt, int workerIndex) {
